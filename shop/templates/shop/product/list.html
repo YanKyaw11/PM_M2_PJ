@@ -1,0 +1,32 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block title%}
+{% endblock %}
+{% block content %}
+    <h1 style="padding-left: 50px;">{% if category %}{{ category.name }}{% else %} Products {% endif %}</h1>
+    <div class="row row-cols-1 row-cols-md-3 g-4" style="padding: 50px;">   
+        {% for p in products %}
+            <div class="col">
+                <div class="card h-100">
+                    <a href="{{ p.get_absolute_url }}">
+                        <img src="{{ p.image.url }}" class="card-img-top" alt="...">
+                    </a>
+                    <div class="card-body">
+                    <h5 class="card-title">{{ p.name }}</h5>
+                    <p class="card-text">{{ p.description }}</p>
+                    <p class="card-title">${{ p.price }}</p>
+                    <form action="{% url "cart:cart_add" p.id %}"  method="post">
+                        {{ cart_product_form }}
+                        {% csrf_token %}
+                        <input class="btn btn-primary" type="submit" value="Add to cart">
+                    </form>
+                    <div class="card-footer">
+                        <small class="text-body-secondary">{{ p.created }}</small>
+                      </div>
+                    </div>
+                </div>
+            </div>
+         {% endfor %}    
+    </div>
+    
+{% endblock %}
